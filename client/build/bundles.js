@@ -33,11 +33,7 @@ module.exports = {
         "aurelia-history-browser",
         "aurelia-logging-console",
         "aurelia-auth",
-        "aurelia-dialog",
-        "bootstrap-drawer",
-        "bootstrap",
-        "bootstrap/css/bootstrap.css!text",
-        "jquery"
+        "aurelia-dialog"
 
       ],
       "options": {
@@ -47,11 +43,13 @@ module.exports = {
         "rev": false
       }
     }
-/*
+
     ,
 
     "dist/bootstrap": {
       "includes": [
+        "bootstrap-drawer",
+        "bootstrap-drawer/dist/css/bootstrap-drawer.css!text",
         "bootstrap",
         "bootstrap/css/bootstrap.css!text",
         "jquery"
@@ -63,6 +61,6 @@ module.exports = {
         "rev": false
       }
     }
-*/
+
   }
 };
