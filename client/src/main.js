@@ -1,11 +1,20 @@
+import environment from './environment';
+
+//Configure Bluebird Promises.
+//Note: You may want to use environment-specific configuration.
+Promise.config({
+  warnings: {
+    wForgottenReturn: false
+  }
+});
 import  'bootstrap';
-import 'bootstrap-drawer/dist/js/drawer';
+import 'bootstrap-drawer';
 import authConfig from 'config/auth-config';
 
 export function configure(aurelia) {
   aurelia.use
     .standardConfiguration()
-    .developmentLogging()
+    //.feature('resources')
     .feature('components/pagination')
     .plugin('aurelia-auth', baseConfig => baseConfig.configure(authConfig))
     .feature('lib/config')
@@ -15,9 +24,15 @@ export function configure(aurelia) {
       config.settings.centerHorizontalOnly = false;
       config.settings.startingZIndex = 1045;
     });
-    //.plugin('aurelia-configuration');
 
 
+  if (environment.debug) {
+    aurelia.use.developmentLogging();
+  }
+
+  if (environment.testing) {
+    aurelia.use.plugin('aurelia-testing');
+  }
 
   //Uncomment the line below to enable animation.
   //aurelia.use.plugin('aurelia-animator-css');
