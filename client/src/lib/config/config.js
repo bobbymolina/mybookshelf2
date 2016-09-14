@@ -8,8 +8,9 @@ import config from 'config/config';
 let logger = LogManager.getLogger('config');
 
 export class Configure {
-  _config = config;
-  constructor(loader) {
+
+  constructor() {
+    this._config = config;
   }
 
   get(key, defval = undefined) {
