@@ -221,6 +221,80 @@ define('routes',['exports'], function (exports) {
     title: 'Just testing'
   }];
 });
+define('config/auth-config',['exports'], function (exports) {
+    'use strict';
+
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+    var configForDevelopment = {
+        loginUrl: '/login',
+        providers: {
+            google: {
+                clientId: '239531826023-ibk10mb9p7ull54j55a61og5lvnjrff6.apps.googleusercontent.com'
+            },
+
+            linkedin: {
+                clientId: '778mif8zyqbei7'
+            },
+            facebook: {
+                clientId: '1452782111708498'
+            }
+        }
+    };
+
+    var configForProduction = {
+        loginUrl: '/login',
+        providers: {
+            google: {
+                clientId: '239531826023-3ludu3934rmcra3oqscc1gid3l9o497i.apps.googleusercontent.com'
+            },
+
+            linkedin: {
+                clientId: '7561959vdub4x1'
+            },
+            facebook: {
+                clientId: '1653908914832509'
+            }
+
+        }
+    };
+    var config;
+    if (window.location.hostname === 'localhost') {
+        config = configForDevelopment;
+    } else {
+        config = configForProduction;
+    }
+
+    exports.default = config;
+});
+define('config/config',["exports"], function (exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var config = {
+    "version": "0.1",
+    "debug": true,
+    "api": {
+      "host": "",
+      "port": 6006,
+      "path": "/api"
+    },
+    "wamp": {
+      "host": "",
+      "port": 8080,
+      "path": "/ws",
+      "realm": "realm1"
+    },
+    "maxUploadSize": 104857600,
+    "notificationAttentionTimeout": 20
+  };
+
+  exports.default = config;
+});
 define('components/author',['exports', 'aurelia-framework'], function (exports, _aureliaFramework) {
   'use strict';
 
@@ -1918,80 +1992,6 @@ define('components/search',['exports', 'aurelia-framework'], function (exports, 
     enumerable: true,
     initializer: null
   })), _class);
-});
-define('config/auth-config',['exports'], function (exports) {
-    'use strict';
-
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
-    var configForDevelopment = {
-        loginUrl: '/login',
-        providers: {
-            google: {
-                clientId: '239531826023-ibk10mb9p7ull54j55a61og5lvnjrff6.apps.googleusercontent.com'
-            },
-
-            linkedin: {
-                clientId: '778mif8zyqbei7'
-            },
-            facebook: {
-                clientId: '1452782111708498'
-            }
-        }
-    };
-
-    var configForProduction = {
-        loginUrl: '/login',
-        providers: {
-            google: {
-                clientId: '239531826023-3ludu3934rmcra3oqscc1gid3l9o497i.apps.googleusercontent.com'
-            },
-
-            linkedin: {
-                clientId: '7561959vdub4x1'
-            },
-            facebook: {
-                clientId: '1653908914832509'
-            }
-
-        }
-    };
-    var config;
-    if (window.location.hostname === 'localhost') {
-        config = configForDevelopment;
-    } else {
-        config = configForProduction;
-    }
-
-    exports.default = config;
-});
-define('config/config',["exports"], function (exports) {
-  "use strict";
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-
-  var config = {
-    "version": "0.1",
-    "debug": true,
-    "api": {
-      "host": "",
-      "port": 6006,
-      "path": "/api"
-    },
-    "wamp": {
-      "host": "",
-      "port": 8080,
-      "path": "/ws",
-      "realm": "realm1"
-    },
-    "maxUploadSize": 104857600,
-    "notificationAttentionTimeout": 20
-  };
-
-  exports.default = config;
 });
 define('lib/access',['exports', 'aurelia-auth', 'aurelia-auth/authentication', 'aurelia-framework', 'aurelia-event-aggregator', 'aurelia-router'], function (exports, _aureliaAuth, _authentication, _aureliaFramework, _aureliaEventAggregator, _aureliaRouter) {
   'use strict';
@@ -7288,8 +7288,8 @@ define('text!components/autocomplete/autocomplete.css', ['module'], function(mod
 define('text!pub-app.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"bootstrap/css/bootstrap.css\"></require>\n\n  <div class=\"page-host\">\n    <router-view></router-view>\n  </div>\n</template>\n"; });
 define('text!components/context-menu/context-menu.css', ['module'], function(module) { module.exports = ".context-menu {\n  box-shadow: 3px 3px 5px 0px rgba(0,0,0,0.50);\n  z-index: 4000;\n  position:absolute;\n  border-radius: 5px;\n}\n\n.context-menu .list-group {\n  margin-bottom: 0px;\n}\n\n.context-menu .header {\n  font-weight: bold;\n}\n\n.context-menu a.item {\n  color: #337ab7;\n  cursor: pointer;\n}\n"; });
 define('text!components/author.html', ['module'], function(module) { module.exports = "<template>\n  <a class=\"author-link\" href=\"${link}\" if.bind=\"linked\">${fullName}</a>\n  <span if.bind=\"!linked\">${fullName}</span>\n  ${!last?', ':''}\n</template>\n"; });
-define('text!components/authors-edit.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"components/autocomplete/autocomplete\"></require>\n  <div class=\"authors-edit\">\n    <div class=\"authors-edit-list edit-list\">\n      <div class=\"authors-edit-list-item\" repeat.for=\"author of authorsVisible\">${author}\n        <i click.delegate=\"removeAuthor($index)\" class=\"fa fa-minus-circle fa-1x\" aria-hidden=\"true\"></i></div>\n    </div>\n\n    <autocomplete loader.bind=\"loaderAuthors\" value-key.bind=\"getFullName\" suggestion-template=\"./autocomplete-authors.html\"\n    value.bind=\"_author\" selected-value.bind=\"_authorSelected\" placeholder=\"Add Author as Last, First\" additional-class=\"secondary-input\"></autocomplete>\n    <i click.delegate=\"addAuthor()\" class=\"fa fa-plus-circle fa-2x\" aria-hidden=\"true\"></i>\n\n  </div>\n</template>\n"; });
 define('text!components/rating/rating.css', ['module'], function(module) { module.exports = ".rating-proposed {\n  color: #3c763d  !important;\n}\n\n.rating-rated {\n  color: #8a6d3b;\n}\n\n.rating-clear {\n color: #a94442;\n}\n\n.rating {\n  display: inline;\n}\n"; });
+define('text!components/authors-edit.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"components/autocomplete/autocomplete\"></require>\n  <div class=\"authors-edit\">\n    <div class=\"authors-edit-list edit-list\">\n      <div class=\"authors-edit-list-item\" repeat.for=\"author of authorsVisible\">${author}\n        <i click.delegate=\"removeAuthor($index)\" class=\"fa fa-minus-circle fa-1x\" aria-hidden=\"true\"></i></div>\n    </div>\n\n    <autocomplete loader.bind=\"loaderAuthors\" value-key.bind=\"getFullName\" suggestion-template=\"./autocomplete-authors.html\"\n    value.bind=\"_author\" selected-value.bind=\"_authorSelected\" placeholder=\"Add Author as Last, First\" additional-class=\"secondary-input\"></autocomplete>\n    <i click.delegate=\"addAuthor()\" class=\"fa fa-plus-circle fa-2x\" aria-hidden=\"true\"></i>\n\n  </div>\n</template>\n"; });
 define('text!components/authors.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"components/author\"></require>\n  <div class=\"ebook-authors\">\n    <author containerless repeat.for=\"author of authors\" if.bind=\"!many\" author.bind=\"author\" last.bind=\"$last\" linked.bind=\"linked\"></author>\n    <span class=\"many-authors\" if.bind=\"many\">Many authors</span>\n  </div>\n</template>\n"; });
 define('text!components/confirm-dialog.html', ['module'], function(module) { module.exports = "<template>\n    <ai-dialog>\n        <ai-dialog-header><h3>Confirm ${action}</h3></ai-dialog-header>\n        <ai-dialog-body>\n            <p>${message}</p>\n        </ai-dialog-body>\n        <ai-dialog-footer>\n            <button class=\"btn btn-default\" click.trigger=\"controller.cancel()\">No</button>\n            <button class=\"btn btn-primary\" click.trigger=\"controller.ok()\">Yes</button>\n        </ai-dialog-footer>\n    </ai-dialog>\n</template>\n"; });
 define('text!components/ebook-action-list.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"components/authors\"></require>\n  <ul class=\"list-group\">\n    <li class=\"list-group-item\" repeat.for=\"ebook of ebooks.data\">\n      <authors authors.one-time=\"ebook.authors\" compact.bind=\"true\" linked.bind=\"false\"></authors>\n      <span class=\"ebook-title\">${ebook.title} (${ebook.language.name})</span>\n      <span class=\"ebook-series\" if.bind=\"ebook.series\">(${ebook.series.title} #${ebook.series_index})</span>\n      <button class=\"btn btn-xs btn-default\" click.delegate=\"action(ebook.id)\">${actionName}</button>\n    </li>\n    <li class=\"list-group-item\" if.bind=\"isMore\"><p>There is more ...</p></li>\n  </ul>\n</template>\n"; });
